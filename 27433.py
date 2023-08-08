@@ -1,5 +1,5 @@
 def fac(n):
-    if n == 0 or n == 1: # 재귀 종료시키는 부분
+    if n == 0: 
         return 1
     else:
         return n * fac(n  - 1)
