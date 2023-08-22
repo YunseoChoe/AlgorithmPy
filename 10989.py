@@ -5,7 +5,7 @@ def quick_sort(arr):
     less_arr = []
     greater_arr = []
     equal_arr = []
-
+    
     for i in range(len(arr)):
         if arr[i] < pivot:
             less_arr.append(arr[i])
@@ -16,23 +16,11 @@ def quick_sort(arr):
     return quick_sort(less_arr) + equal_arr + quick_sort(greater_arr)
 
 n = int(input())
+num = []
+for i in range(n):
+    a = int(input())
+    num.append(a)
 
-num = [] # 전체 좌표 배열
-xy = [] # 각 좌표 배열
-
-for _ in range(n):
-    xy = input().split()
-    for i in range(len(xy)):
-        xy[i] = int(xy[i])
-    num.append(xy)
-
-print(num)
-
-# 정렬
 num = quick_sort(num)
-
-# 출력
 for i in range(len(num)):
-    for j in range(len(xy)):
-        print(num[i][j], end = " ")
-    print()
+    print(num[i])

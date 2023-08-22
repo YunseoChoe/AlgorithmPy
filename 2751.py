@@ -1,19 +1,19 @@
-def quick_sort(arr):
-    if len(arr) < 2:
-        return arr
-    less_arr = []
-    greater_arr = []
-    equal_arr = []
-    pivot = arr[-1]
-    for i in range(len(arr)):
-        if arr[i] < pivot:
-            less_arr.append(arr[i])
-        elif arr[i] > pivot:
-            greater_arr.append(arr[i])
-        else:
-            equal_arr.append(arr[i])
+# def quick_sort(arr):
+#     if len(arr) < 2:
+#         return arr
+#     less_arr = []
+#     greater_arr = []
+#     equal_arr = []
+#     pivot = arr[-1]
+#     for i in range(len(arr)):
+#         if arr[i] < pivot:
+#             less_arr.append(arr[i])
+#         elif arr[i] > pivot:
+#             greater_arr.append(arr[i])
+#         else:
+#             equal_arr.append(arr[i])
 
-    return quick_sort(less_arr) + equal_arr + quick_sort(greater_arr)
+#     return quick_sort(less_arr) + equal_arr + quick_sort(greater_arr)
 
 def merge_sort(arr):
     if len(arr) < 2:
@@ -40,6 +40,7 @@ def merge_sort(arr):
 
 n = int(input())
 num = []
+
 for i in range(n):
     a = int(input())
     num.append(a)
