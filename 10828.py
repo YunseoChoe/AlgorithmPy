@@ -8,19 +8,23 @@ for i in range(n):
 
     if a[0] == "push":
         num.append(a[-1])
+
     elif a[0] == "pop":
         if len(num) == 0:
             print(-1)
         else:
             ret = num.pop()
             print(ret)
+
     elif a[0] == "size":
         print(len(num))
+
     elif a[0] == "empty":
         if len(num) == 0:
             print(1)
         else:
             print(0)
+            
     elif a[0] == "top":
         if len(num) == 0:
             print(-1)
