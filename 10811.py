@@ -1,42 +1,25 @@
 # 바구니 뒤집기
-# 입력받기 1
 n, m = input().split()
 n = int(n)
 m = int(m)
 
-# 바구니 생성  
-num = []
+bucket = []
 for i in range(1, n + 1):
-    num.append(i)
+    bucket.append(i)
 
-# 입력받기 2
 for i in range(m):
     a, b = input().split()
     a = int(a)
     b = int(b)
-    temp = num[a - 1:b]
-    temp.reverse()
-    print(temp)
-    num = temp + num[b:]
-    print(num)
 
-print(f'{num}')
+    # 부분 나누기
+    part = bucket[a - 1: b]
+    # 부분 뒤집기
+    part.reverse()
+    # 합치기
+    bucket = bucket[:a - 1] + part + bucket[b:]
+    # print(bucket)
 
-# num = [1, 2, 3, 4, 5]
-# temp = num[0:3]
-# temp.reverse()
-# print(temp)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+# list -> 하나씩 출력
+for i in range(len(bucket)):
+    print(bucket[i], end = " ")
