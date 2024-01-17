@@ -1,23 +1,27 @@
+# 공 바꾸기
+# 입력받기
 n, m = input().split()
 n = int(n)
 m = int(m)
 
-# 바구니 정렬
-baguni = [0] * n
-for i in range(len(baguni)):
-    baguni[i] = i + 1
+# 바구니
+bucket = []
+for i in range(1, n + 1):
+    bucket.append(i)
 
 # 공 바꾸기
 for i in range(m):
-    a, b = input().split()
-    a = int(a)
-    b = int(b)
-    a -= 1
-    b -= 1
-    
+    num = input().split()
+    # 정수화
+    for j in range(len(num)):
+        num[j] = int(num[j])
+    a = num[0]
+    b = num[1]
     # swap
-    baguni[a], baguni[b] = baguni[b], baguni[a]
+    temp = bucket[a - 1]
+    bucket[a - 1] = bucket[b - 1]
+    bucket[b - 1] = temp
 
-# 출력
-for i in range(len(baguni)):
-    print(baguni[i], end = " ")
+# 출력하기
+for i in range(len(bucket)):
+    print(bucket[i], end = " ")
