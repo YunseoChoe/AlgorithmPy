@@ -32,8 +32,8 @@ beebox = 1 # 해당하는 칸의 최댓값
 if n == 1:
     print(1)
 else:
-    while n > beebox:
-        beebox += 6 * i
+    while n > beebox: # 해당하는 칸의 최댓값보다 크면 cnt += 1
+        beebox += 6 * i # 최댓값 갱신
         cnt += 1
         i += 1
     print(cnt)
