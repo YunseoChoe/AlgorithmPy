@@ -26,17 +26,13 @@ if m != 0:
         elif n == 102 or n == 98:
             print(2)
         else:
-            print(len(n))
+            print(len(str(n)))
 
     # 고장난 번호가 포함되어 있다면
     else:
         n = int(n)
         if n == 100:
             print(0)
-        elif n == 101 or n == 99:
-            print(1)
-        elif n == 102 or n == 98:
-            print(2)
         else:
             min_buttons_2 = 500000000
             for i in range(0, 1000005): # 999999까지
@@ -51,7 +47,7 @@ if m != 0:
                             min_buttons_2 = int(len(str(i)) + abs(int(i) - int(n)))
 
 
-            print(min_buttons_2)
+            print(min(min_buttons_2, abs(n - 100)))
 
 # 고장난 번호가 없을 경우
 else:
