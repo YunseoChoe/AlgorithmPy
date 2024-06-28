@@ -3,7 +3,6 @@ n = int(input())
 m = int(input())
 
 # 고장난 번호가 있을 경우
-is_include = False
 if m != 0:
     nums = map(int, input().split())
     nums = list(nums) # str형 리스트
@@ -45,8 +44,6 @@ if m != 0:
                     if j == len(i) - 1: # j가 i의 자릿수와 같으면 (=한 번도 break문을 안 만나면) 최솟값 갱신
                         if min_buttons_2 > int(len(str(i)) + abs(int(i) - int(n))):
                             min_buttons_2 = int(len(str(i)) + abs(int(i) - int(n)))
-
-
             print(min(min_buttons_2, abs(n - 100)))
 
 # 고장난 번호가 없을 경우
