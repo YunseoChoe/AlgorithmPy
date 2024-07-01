@@ -12,7 +12,6 @@ def func(): # 재귀 함수
         if i not in arr:
             arr.append(i)
             func()
-            print("arr.pop()")
             arr.pop()
 
 func()
