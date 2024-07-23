@@ -1,5 +1,5 @@
 import copy
-# from itertools import permutations
+from itertools import permutations
 
 # 연산자 끼워넣기
 n = int(input())
@@ -8,50 +8,40 @@ num = list(num)
 operator = map(int, input().split())
 operator = list(operator)
 
-# print(f'operator: {operator}')
-
 op = [] # 연산자 배열
-# [2, 1, 1, 1] => [+, +, -, *, /]
 operators = ['+', '-', '*', '/']
 for i in range(len(operator)):
     for j in range(operator[i]):
         op.append(operators[i])
-# print(f'op: {op}')
 
 p = [] # 연산자 순열 배열
 
 # 순열 재귀 함수 (DFS)
-arr = []
-def func():
-    if len(arr) == (n - 1):
-        # p.append(arr)
-        p.append(copy.deepcopy(arr))
-        return
+# arr = []
+# def func():
+#     if len(arr) == (n - 1):
+#         # p.append(arr)
+#         p.append(copy.deepcopy(arr))
+#         return
     
-    for i in range(n - 1):
-        if i not in arr:
-            arr.append(i)
-            func()
-            arr.pop()
+#     for i in range(n - 1):
+#         if i not in arr:
+#             arr.append(i)
+#             func()
+#             arr.pop()
 
-func()
-
-# print(f'p: {p}')
-# print(f'op: {op}')
+# func()
 
 # p를 연산자로 변경
-for i in range(len(p)):
-    for j in range(len(p[0])):
-        p[i][j] = op[p[i][j]]
+# for i in range(len(p)):
+#     for j in range(len(p[0])):
+#         p[i][j] = op[p[i][j]]
 
-# print(list(permutations(op, n - 1)))
-
+list_p = list(set(permutations(op, n - 1))) # 중복 순열 제거
 results = [] # 각 계산 결과를 저장하는 배열
 
-# print(f'p: {p}')
-
 # 각 순열에 대한 조합 찾기
-for i in range(len(p)):
+for i in range(len(list_p)):
     # calculate 배열 초기화
     calculate = [0] * (len(num) + len(op))
     odd = 0 # num 인덱스
@@ -63,13 +53,9 @@ for i in range(len(p)):
             odd += 1
         # j가 홀수면 연산자
         else:
-            calculate[j] = p[i][even]
+            calculate[j] = list_p[i][even]
             even += 1
-
-    # print(f'calculate: {calculate}')
     results.append(calculate) 
-
-# print(results) # 확인용 
 
 # 계산
 sum_list = []
