@@ -39,6 +39,7 @@ p = [] # 연산자 순열 배열
 
 list_p = list(set(permutations(op, n - 1))) # 중복 순열 제거
 results = [] # 각 계산 결과를 저장하는 배열
+sum_list = [] # 각 sum을 저장하는 배열
 
 # 각 순열에 대한 조합 찾기
 for i in range(len(list_p)):
@@ -57,27 +58,21 @@ for i in range(len(list_p)):
             even += 1
     results.append(calculate) 
 
-# 계산
-sum_list = []
-for i in range(len(results)):
-    sum = results[i][0]
-    for j in range(len(results[0]) - 1):
-        # 연산자 처리
-        oper = results[i][j]
-        next_value = results[i][j + 1]
-
+    # sum 구하기
+    sum = calculate[0]
+    for j in range(1, len(calculate) - 1):
         # 더하기
-        if oper == '+':
-            sum += next_value
+        if calculate[j] == '+':
+            sum += calculate[j + 1]
         # 빼기
-        elif oper == '-':
-            sum -= next_value
+        elif calculate[j] == '-':
+            sum -= calculate[j + 1]
         # 곱하기
-        elif oper == '*':
-            sum *= next_value
+        elif calculate[j] == '*':
+            sum *= calculate[j + 1]
         # 나누기
-        elif oper == '/':
-            sum = int(sum / next_value) 
+        elif calculate[j] == '/':
+            sum = int(sum / calculate[j + 1])
 
     sum_list.append(sum)
 
