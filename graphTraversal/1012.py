@@ -1,4 +1,6 @@
 # 유기농 배추
+import sys
+sys.setrecursionlimit(210000)
 
 # dfs 함수
 def dfs(start_x, start_y):
