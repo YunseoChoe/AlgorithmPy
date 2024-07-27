@@ -1,39 +1,35 @@
 # 유기농 배추
-dfs_arr = []
+# dfs 함수
+def dfs(start_x, start_y):
+    visited[start_x][start_y] = 1
+    dx = [0, 0, -1, 1]
+    dy = [-1, 1, 0, 0]
+    print(f"기존 x,y 좌표: {start_x, start_y}")
+    for i in range(4):
+        x = start_x + dy[i]
+        y = start_y + dx[i]
+        print(f'x, y 좌표: {x, y}')
+    print()
 
-# visited 초기화
-# visited = []
-# for i in range(50):
-#     v = []
-#     for j in range(50):
-#         v.append(0)
-#     visited.append(v)
-
-# def dfs(start, m, n):
-#     start_x, start_y = start
-#     visited[start_x][start_y] = 1
-#     dfs_arr.append((start_x, start_y))
-#     dx = [0, 0, -1, 1]
-#     dy = [-1, 1, 0, 0]
-#     for i in range(4):
-#         x = start_x + dx[i]
-#         y = start_y + dy[i]
-
-#         if 0 <= x < m and 0 <= y < n and mat[x][y] == 1 and visited[x][y] == 0:
-#             dfs((x, y), m, n)
-
-#     return len(dfs_arr)
+    if 0 <= x < n and 0 <= y < m and mat[x][y] == 1 and visited[x][y] == 0:
+        print("!!")
+        dfs(x, y)
 
 # 코드 시작
 t = int(input())
 return_values = []
 
 for _ in range(t):
-    m, n, k = input().split()
-    m = int(m)
-    n = int(n)
-    k = int(k)
+    m, n, k = map(int, input().split())
     mat = []
+
+    # visited 초기화
+    visited = []
+    for i in range(n):
+        v = []
+        for j in range(m):
+            v.append(0)
+        visited.append(v)
 
     # mat 초기화
     for i in range(n):
@@ -42,16 +38,17 @@ for _ in range(t):
             mat_row.append(0)
         mat.append(mat_row)
             
-    # 좌표 입력받기
+    # 배추 자리 표시
     for _ in range(k):
         x, y = map(int, input().split())
         mat[y][x] = 1
 
     print(mat)
-#     # 함수 호출
-#     return_value = dfs((0, 0), m, n)
-#     print(f'return_value: {return_value}')
-#     return_values.append(return_value)
 
-# return_value = dfs((0, 0), m, n)
-# print(return_values)
+    # 함수 호출
+    for i in range(n):
+        for j in range(m):
+            if mat[i][j] == 1 and visited[i][j] == 0:
+                dfs(i, j)
+
+
