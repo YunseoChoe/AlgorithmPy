@@ -1,19 +1,16 @@
 # 유기농 배추
+
 # dfs 함수
 def dfs(start_x, start_y):
     visited[start_x][start_y] = 1
     dx = [0, 0, -1, 1]
     dy = [-1, 1, 0, 0]
-    print(f"기존 x,y 좌표: {start_x, start_y}")
     for i in range(4):
         x = start_x + dy[i]
         y = start_y + dx[i]
-        print(f'x, y 좌표: {x, y}')
-    print()
 
-    if 0 <= x < n and 0 <= y < m and mat[x][y] == 1 and visited[x][y] == 0:
-        print("!!")
-        dfs(x, y)
+        if 0 <= x < n and 0 <= y < m and mat[x][y] == 1 and visited[x][y] == 0:
+            dfs(x, y)
 
 # 코드 시작
 t = int(input())
@@ -43,12 +40,12 @@ for _ in range(t):
         x, y = map(int, input().split())
         mat[y][x] = 1
 
-    print(mat)
-
+    dfs_arr = []
     # 함수 호출
     for i in range(n):
         for j in range(m):
             if mat[i][j] == 1 and visited[i][j] == 0:
+                dfs_arr.append((i, j))
                 dfs(i, j)
 
-
+    print(len(dfs_arr))
