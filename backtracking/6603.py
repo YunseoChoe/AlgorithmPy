@@ -24,15 +24,7 @@
 
 
 # 로또 복습
-while True:
-    num = list(map(int, input().split()))
-    if num[0] == 0:
-        break
-
-    s = num[1:]
-
-    arr = []
-    def func(start):
+def func(start):
         if len(arr) == 6:
             for i in range(len(arr)):
                 print(arr[i], end = " ")
@@ -44,6 +36,15 @@ while True:
                     arr.append(s[i])
                     func(i + 1)
                     arr.pop()
+                    
+while True:
+    num = list(map(int, input().split()))
+    if num[0] == 0:
+        break
+
+    s = num[1:]
+
+    arr = []
 
     func(0)
     print()
