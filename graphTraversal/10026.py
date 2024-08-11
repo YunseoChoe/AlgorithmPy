@@ -1,5 +1,6 @@
 # 적록색약
-import copy
+import sys
+sys.setrecursionlimit(10000)
 
 # 입력 
 n = int(input())
@@ -10,8 +11,6 @@ for i in range(n):
     for j in range(len(p)):
         p_list.append(p[j])
     painting.append(p_list)
-
-# print(painting)
 
 # visited 배열 초기화
 visited = []
@@ -28,8 +27,6 @@ for i in range(n):
     for j in range(n):
         v.append(0)
     green_red_visited.append(v)
-
-# print(visited)
 
 # 상하좌우 배열
 dx = [-1, 1, 0, 0]
