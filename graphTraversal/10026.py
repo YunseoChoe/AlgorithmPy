@@ -67,19 +67,16 @@ def green_red_dfs(start_x, start_y):
                 green_red_dfs(x, y)
 
 dfs_arr = []
-# 정상 dfs 호출
+green_red_dfs_arr = []
+# dfs 호출
 for i in range(n):
     for j in range(n):
+        # 정상
         if visited[i][j] == 0:
             dfs(i, j)
             dfs_arr.append((i, j))
-
-green_red_dfs_arr = []
-# 적록색약 dfs 호출
-for i in range(n):
-    for j in range(n):
+        # 적록색약
         if green_red_visited[i][j] == 0:
-            # print(f'여기에서 호출: {painting[i][j]}')
             green_red_dfs(i, j)
             green_red_dfs_arr.append((i, j))
             
