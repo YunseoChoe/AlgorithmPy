@@ -1,64 +1,38 @@
-# 연산자 끼워넣기
-import copy
-from itertools import permutations
+# 14888 (재귀 방법)
+
+max_value = -10000000000
+min_value = 10000000000
 
 n = int(input())
-num = map(int, input().split())
-num = list(num)
-operator = map(int, input().split())
-operator = list(operator)
+num = list(map(int, input().split()))
+add, sub, mul, div = list(map(int, input().split()))
 
-op = [] # 연산자 배열
-operators = ['+', '-', '*', '/']
-for i in range(len(operator)):
-    for j in range(operator[i]):
-        op.append(operators[i])
-
-# p = [] # 연산자 순열 배열
-
-# 순열 재귀 함수 (DFS)
-# arr = []
-# def func():
-#     if len(arr) == (n - 1):
-#         # p.append(arr)
-#         p.append(copy.deepcopy(arr))
-#         return
+# idx: 내가 지금 계산하려고 하는 숫자를 가리키는 인덱스
+def func(idx, result):
+    global max_value, min_value, add, sub, mul, div, n
     
-#     for i in range(n - 1):
-#         if i not in arr:
-#             arr.append(i)
-#             func()
-#             arr.pop()
-
-# func()
-
-# p를 연산자로 변경
-# for i in range(len(p)):
-#     for j in range(len(p[0])):
-#         p[i][j] = op[p[i][j]]
-
-list_p = list(set(permutations(op, n - 1))) # 중복 순열 제거
-results = [] # 각 계산 결과를 저장하는 배열
-
-while len(list_p) != 0:
-    operator = list_p.pop()
-    # 합 구하기
-    sum = num[0]
-    for i in range(1, len(num)):
-        # 더하기
-        if operator[i - 1] == '+':
-            sum += num[i]
-        # 빼기
-        elif operator[i - 1] == '-':
-            sum -= num[i]
-        # 곱하기
-        elif operator[i - 1] == '*':
-            sum *= num[i]
-        # 나누기
-        else:
-            sum = int(sum / num[i])
+    if idx == n - 1:
+        max_value = max(max_value, result)
+        min_value = min(min_value, result)
+        return
     
-    results.append(sum)
+    if add > 0:
+        add -= 1
+        func(idx + 1, result + num[idx + 1])
+        add += 1
+    if sub > 0:
+        sub -= 1
+        func(idx + 1, result - num[idx + 1])
+        sub += 1
+    if mul > 0:
+        mul -= 1
+        func(idx + 1, result * num[idx + 1])
+        mul += 1
+    if div > 0:
+        div -= 1
+        func(idx + 1, int(result / num[idx + 1]))
+        div += 1
 
-print(max(results))
-print(min(results))
+func(0, num[0])
+print(max_value)
+print(min_value)
