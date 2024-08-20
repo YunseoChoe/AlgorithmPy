@@ -4,7 +4,6 @@ nums = list(map(int, input().split()))
 
 i_index = [] # 인덱스 배열
 arr = []
-max_arr = [] # 최댓값들을 담는 배열
 max = n * (-100) - 1
 
 def func():
