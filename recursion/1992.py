@@ -1,8 +1,6 @@
 # 쿼드트리
 n = int(input())
 board = []
-cnt_0 = 0
-cnt_1 = 0
 
 for i in range(n):
     color = list(input())
@@ -12,31 +10,23 @@ for i in range(n):
     board.append(color)
 
 def func(x, y, n):
-    global cnt_0, cnt_1
     color = board[x][y]
     
     for i in range(x, x + n):
         for j in range(y, y + n):
             if color != board[i][j]:
-                new_n = n // 2
                 # 1구역
                 print("(", end = "")
-                func(x, y, new_n)
-                # print(")")
+                func(x, y, n // 2)
                 # 2구역
-                # print("(")
-                func(x, y + new_n, new_n)
+                func(x, y + n // 2, n // 2)
                 # print(")")
                 # 3구역
-                # print("(")
-                func(x + new_n, y, new_n)
-                # print(")")
+                func(x + n // 2, y, n // 2)
                 # 4구역
-                # print("(")
-                func(x + new_n, y + new_n, new_n)
+                func(x + n // 2, y + n // 2, n // 2)
                 print(")", end = "")
                 return
-    
     
     print(color, end = "")
 
