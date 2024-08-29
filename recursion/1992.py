@@ -20,7 +20,6 @@ def func(x, y, n):
                 func(x, y, n // 2)
                 # 2구역
                 func(x, y + n // 2, n // 2)
-                # print(")")
                 # 3구역
                 func(x + n // 2, y, n // 2)
                 # 4구역
