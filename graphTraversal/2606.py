@@ -1,27 +1,28 @@
-# 바이러스
-n = int(input())
-e = int(input())
+# 바이러스 
+n = int(input()) # 컴퓨터의 수
+edge = int(input()) # 간선의 개수
+cnt = 0
 
-dfs_arr = []
-adj_mat = [[0] * (n + 1) for _ in range(n + 1)]
+adj_mat = []
+for i in range(n):
+    mat = []
+    for j in range(n):
+        mat.append(0)
+    adj_mat.append(mat)
 
-# 간선 입력
-for i in range(e):
-    edge = map(int, input().split())
-    edge = list(edge)
-    adj_mat[edge[0]][edge[1]] = 1 # 양방향
-    adj_mat[edge[1]][edge[0]] = 1
+for i in range(edge):
+    a, b = list(map(int, input().split()))
+    adj_mat[a - 1][b - 1] = 1
+    adj_mat[b - 1][a - 1] = 1
 
-visited = [0] * (n + 1)
-def dfs(start):
-    if visited[start] == 1:
+visited = [False] * n
+def dfs(start, cnt):
+    if visited[start] == True:
         return
-    else:
-        visited[start] = 1
-        dfs_arr.append(start)
-        for i in range(len(adj_mat[0])):
-            if visited[i] == 0 and adj_mat[start][i] == 1:
-                dfs(i)
-
-dfs(1)
-print(len(dfs_arr))
+    visited[start] = True
+    for i in range(len(adj_mat[start])):
+        if visited[i] == False and adj_mat[start][i] == 1:
+            cnt = dfs(i, cnt + 1)
+    return cnt
+            
+print(dfs(0, 0))
