@@ -5,9 +5,7 @@ cnt = 0
 
 adj_mat = []
 for i in range(n):
-    mat = []
-    for j in range(n):
-        mat.append(0)
+    mat = [0] * n
     adj_mat.append(mat)
 
 for i in range(edge):
