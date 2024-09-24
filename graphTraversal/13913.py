@@ -7,20 +7,15 @@ path = {} # 지나온 위치를 저장하는 딕셔너리 (key값은 해당 위�
 def print_path():
     root = [] 
     now = k
-    # 이전 위치로 이동하면서 경로 저장
+    root.append(now)
     while now != n:
-        root.append(now)
         now = path[now]
-        if now == n:
-            root.append(n)
-    # 경로가 없을 경우
-    if len(root) == 0:
-        print(k)
-    else:
-        # 역순으로 출력
-        root.reverse()    
-        for value in root:
-            print(value, end = " ")
+        root.append(now)
+    
+    # 역순으로 출력
+    root.reverse()    
+    for value in root:
+        print(value, end = " ")
     
 def bfs(start):
     global return_path
