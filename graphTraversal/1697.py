@@ -11,8 +11,13 @@ def bfs(start):
     
     while not len(queue) == 0:
         x = queue.pop(0)
+        # 도착했을 경우 출력 후 종료
+        if x == m:
+            print(dist[x])
+            break
+        
         for x_1 in [x - 1, x + 1, x * 2]:
-            if x_1 == start:
+            if x_1 == start: 
                 pass
             else:
                 if 0 <= x_1 <= 100000 and dist[x_1] == 0:
@@ -20,4 +25,3 @@ def bfs(start):
                     queue.append(x_1)
 
 bfs(n)
-print(dist[m])
