@@ -18,7 +18,6 @@ def print_path():
         print(value, end = " ")
     
 def bfs(start):
-    global return_path
     queue = []
     dist[start] = 0
     path[start] = start                                                                            
