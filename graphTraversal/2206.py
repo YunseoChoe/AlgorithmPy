@@ -1,50 +1,75 @@
 # 벽 부수고 이동하기
+import sys
 from collections import deque
+input = sys.stdin.readline
 
-n, m = map(int, input().split())
+# 동서남북
+dx = [0, 0, 1, -1]
+dy = [1, -1, 0, 0]
 
-mat = []
-for i in range(n):
-    mat_list = list(map(int, input()))
-    mat.append(mat_list)
-
-visited = []
-for i in range(n):
-    visited_list = []
-    for j in range(m):
-        list = [0, 0]
-        visited_list.append(list)
-    visited.append(visited_list)
-
-dx = [0, 0, -1, 1]
-dy = [-1, 1, 0, 0]
-
-def bfs():
+def bfs(start_x, start_y):
     q = deque()
-    q.append((0, 0, 0))
-    visited[0][0][0] = 1
+    visited[start_x][start_y][0] = 1 # 시작점 경로는 1
+    q.append((start_x, start_y))
 
     while q:
-        x, y, breaks = q.popleft()
-        if x == n - 1 and y == m - 1:
-            print(visited[x][y][breaks])
+        new_x, new_y = q.popleft()
+        # 목적지에 도달했다면
+        if new_x + 1 == n and new_y + 1 == m:
+            print(max(visited[new_x][new_y][0], visited[new_x][new_y][1]))
             return
         
+        # 동서남북
         for i in range(4):
-            new_x = x + dx[i]
-            new_y = y + dy[i]
+            nx = new_x + dx[i]
+            ny = new_y + dy[i]
 
-            if 0 <= new_x < n and 0 <= new_y < m:
-                # 벽을 처음 부신 경우
-                if mat[new_x][new_y] == 1 and breaks == 0:
-                    visited[new_x][new_y][1] = visited[x][y][0] + 1
-                    q.append((new_x, new_y, 1))
-                # 벽이 아니고 방문하지 않은 경우
-                elif mat[new_x][new_y] == 0 and visited[new_x][new_y][breaks] == 0:
-                    q.append((new_x, new_y, breaks))
-                    visited[new_x][new_y][breaks] = visited[x][y][breaks] + 1
-    # 도달하지 못했을 경우
-    return -1
+            if 0 <= nx < n and 0 <= ny < m:
+                # 0이라면
+                if graph[nx][ny] == "0":
+                    # 벽을 1번 부셨고, 방문하지 않았다면
+                    if visited[new_x][new_y][1] > 0 and visited[new_x][new_y][0] == 0:
+                        visited[nx][ny][1] = visited[new_x][new_y][1] + 1
+                        q.append((nx, ny))
+                    # 벽을 부수지 않았고, 방문하지 않았다면
+                    elif visited[new_x][new_y][1] == 0 and visited[nx][ny][0] == 0:
+                        visited[nx][ny][0] = visited[new_x][new_y][0] + 1
+                        q.append((nx, ny))
+                
+                # 1이고, 방문하지 않았다면
+                if graph[nx][ny] == "1" and visited[nx][ny][0] == 0 and visited[nx][ny][1] == 0:
+                    # 벽을 부수고 오지 않았다면
+                    if visited[new_x][new_y][1] == 0:
+                        visited[nx][ny][1] = visited[new_x][new_y][0] + 1
+                        q.append((nx, ny))
 
-if bfs():
+    # 목적지에 도달하지 못했다면 -1 출력
     print(-1)
+    return
+
+
+if __name__ == '__main__':
+    # 입력 받기
+    n, m = map(int, input().strip().split(' '))
+    graph = []
+    for i in range(n):
+        graph_list = input().strip()
+        graph.append(graph_list)
+    
+    # visited 초기화 
+    visited = []
+    for i in range(n):
+        visited_mat = []
+        for j in range(m):
+            visited_list = [0, 0]
+            visited_mat.append(visited_list)
+        visited.append(visited_mat)
+
+    # (0, 0)부터 bfs 시작
+    bfs(0, 0)
+
+
+
+
+
+
