@@ -3,9 +3,9 @@ import sys
 from collections import deque
 input = sys.stdin.readline
 
-# 동서남북
-dx = [0, 0, 1, -1]
-dy = [1, -1, 0, 0]
+# 북동남서
+dx = [-1, 0, 1, 0]
+dy = [0, 1, 0, -1]
 
 if __name__ == '__main__':
     # 입력받기
@@ -22,7 +22,6 @@ if __name__ == '__main__':
     j = c # 시작 y위치
 
     # 후진할 수 없을 때까지 작동
-    # is_all_clean_up = True
     while True:
         # 1. 현재 칸이 청소되지 않은 경우
         if graph[i][j] == 0:
@@ -40,84 +39,28 @@ if __name__ == '__main__':
 
         # 2. 현재 칸의 주변 4칸 중 청소되지 않은 빈 칸이 없는 경우
         if is_clean == False:
-            # 후진할 수 있다면 후진하고, 후진할 수 없다면 멈춤
-            # 동
-            if d == 1:
-                if j - 1 >= 0:
-                    # 만약 벽이면 종료
-                    if graph[i][j - 1] == 1:
-                        break
-                    # 벽이 아니면 후진
-                    else:
-                        j -= 1
-                    
-            # 서
-            elif d == 3:
-                if j + 1 < m:
-                    # 만약 벽이면 종료
-                    if graph[i][j + 1] == 1:
-                        break
-                    # 벽이 아니면 후진
-                    else:
-                        j += 1
+            index = (d + 2) % 4
+            nx = i + dx[index]
+            ny = j + dy[index]
 
-            # 남
-            elif d == 2:
-                if i - 1 >= 0:
-                    # 만약 벽이면 종료
-                    if graph[i - 1][j] == 1:
-                        break
-                    # 벽이 아니면 후진
-                    else:
-                        i -= 1
-
-            # 북
-            elif d == 0:
-                if i + 1 < n:
-                    if graph[i + 1][j] == 1:
-                        break
-                    else:
-                        i += 1
-                    
-            
-
+            # 범위가 맞고 만약 벽이 아니라면 후진
+            if 0 <= nx < n and 0 <= ny < m and graph[nx][ny] != 1:
+                i = nx
+                j = ny
+            # 벽이라면 종료
+            else:
+                break
+                 
         # 3. 현재 칸의 주변 4칸 중 청소되지 않은 빈 칸이 있는 경우
         if is_clean:
             # 1. 반시계 회전
-            # 동 -> 북
-            if d == 1:
-                d = 0
-            # 서 -> 남
-            elif d == 3:
-                d = 2
-            # 남 -> 동
-            elif d == 2:
-                d = 1
-            # 북 -> 서
-            elif d == 0:
-                d = 3
-
+            d = (d + 3) % 4
+            nx = i + dx[d]
+            ny = j + dy[d]
+            
             # 2. 앞 칸이 청소되지 않았다면 한 칸 전진
-            # 동
-            if d == 1:
-                if j + 1 < m:
-                    if graph[i][j + 1] == 0:
-                        j += 1
-            # 서
-            elif d == 3:
-                if j - 1 >= 0:
-                    if graph[i][j - 1] == 0:
-                        j -= 1
-            # 남
-            elif d == 2:
-                if i + 1 < n:
-                    if graph[i + 1][j] == 0:
-                        i += 1
-            # 북
-            elif d == 0:
-                if i - 1 >= 0:
-                    if graph[i - 1][j] == 0:
-                        i -= 1
-
+            if 0 <= nx < n and 0 <= ny < m and graph[nx][ny] == 0:
+                i = nx
+                j = ny
+            
     print(clean_count)
-
