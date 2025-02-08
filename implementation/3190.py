@@ -8,7 +8,6 @@ if __name__ == '__main__':
     dx = [0, 1, 0, -1]
     dy = [1, 0, -1, 0] 
     
-
     q = deque()
     n = int(input()) # 보드의 크기
     k = int(input()) # 사과의 개수
@@ -32,7 +31,7 @@ if __name__ == '__main__':
         second, way = input().split()
         snake_ways[second] = way
 
-    total_second = 1
+    total_second = 0 # 처음 시작은 0초 부터
     d = 0 # 뱀은 동쪽을 보고 시작
     nx = 0
     ny = 0
@@ -75,4 +74,3 @@ if __name__ == '__main__':
             q.append((nx, ny))
             # 꼬리 이동
             q.popleft()
-
