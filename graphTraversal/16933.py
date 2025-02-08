@@ -18,26 +18,25 @@ def bfs():
         if cur_x == (n - 1) and cur_y == (m - 1):
             print(visited[cur_x][cur_y][breaks]) 
             return
-
+        day = dist % 2
         # 동서남북
         for i in range(4):
-            nx = cur_x + dx[i]
-            ny = cur_y + dy[i]
+            nx, ny = cur_x + dx[i], cur_y + dy[i]
             if 0 <= nx < n and 0 <= ny < m:
                 # 벽이 아닐 때
                 if visited[nx][ny][breaks] == 0 and graph[nx][ny] == 0:
-                    q.append((nx, ny, breaks, dist + 1))
                     visited[nx][ny][breaks] = dist + 1
+                    q.append((nx, ny, breaks, dist + 1))
                     
                 # 벽일 때 
-                if graph[nx][ny] == 1:
-                    # 밤이면 제자리 이동
-                    if dist % 2 == 0:
+                if graph[nx][ny] == 1 and breaks < k and visited[nx][ny][breaks + 1] == 0:
+                    if not day:
                         q.append((cur_x, cur_y, breaks, dist + 1))
                     # 낮이면 그냥 이동
-                    elif dist % 2 == 1 and breaks < k and visited[nx][ny][breaks + 1] == 0:
-                        q.append((nx, ny, breaks + 1, dist + 1))
+                    else:
                         visited[nx][ny][breaks + 1] = dist + 1
+                        q.append((nx, ny, breaks + 1, dist + 1))
+                        
     # 도달하지 못했을 경우
     print(-1)
     return
@@ -45,20 +44,6 @@ def bfs():
 if __name__ == '__main__':
     # 입력 받기
     n, m, k = map(int, input().strip().split())
-    graph = []
-    for i in range(n):
-        graph_list = list(map(int, input().strip()))
-        graph.append(graph_list)
-
-    # visited 초기화
-    visited = []
-    for i in range(n):
-        visited_mat = []
-        for j in range(m):
-            visited_list = [0] * (k + 1) # k + 1번으로 (k번까지 부실 수 있으니까)
-            visited_mat.append(visited_list)
-        visited.append(visited_mat)
-
-    # (0, 0)부터 bfs 시작
-    bfs() # 거리는 1부터 시작
-    
+    graph = [list(map(int, input().rstrip())) for _ in range(n)]
+    visited = [[[0] * (k + 1) for _ in range(m)] for _ in range(n)]
+    bfs()
