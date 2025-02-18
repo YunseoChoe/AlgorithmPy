@@ -10,12 +10,12 @@ input = sys.stdin.readline
 dx = [0, 0, 1, -1]
 dy = [1, -1, 0, 0]
 
-safe_area_count_list = []
-
+max_area = 0
 # virus 퍼뜨리는 함수 (bfs)
 def virus(board, safe_area_count):
+    global max_area
     temp_board = copy.deepcopy(board) # board값 복사
-
+    
     q = deque()
     # 바이러스 좌표 q에 넣기
     for i in range(n):
@@ -25,23 +25,26 @@ def virus(board, safe_area_count):
     
     while q:
         x, y = q.popleft()
+
         # 동서남북
         for i in range(4):
             nx = x + dx[i]
             ny = y + dy[i]
+
             if 0 <= nx < n and 0 <= ny < m:
                 # 빈 칸이면
                 if temp_board[nx][ny] == 0:
                     temp_board[nx][ny] = 2
                     q.append((nx, ny))
-                # 벽이거나 바이러스면 pass
 
     # 안전 영역 세기
     for i in range(n):
         for j in range(m):
             if temp_board[i][j] == 0:
                 safe_area_count += 1
-    safe_area_count_list.append(safe_area_count)
+    # 최댓값 갱신
+    if max_area < safe_area_count:
+        max_area = safe_area_count
 
 # (중복없이) 벽 세우는 함수
 def createWall(count):
@@ -68,4 +71,4 @@ if __name__ == '__main__':
     createWall(0)
 
     # 최대 안전 영역 출력
-    print(max(safe_area_count_list))
+    print(max_area)
