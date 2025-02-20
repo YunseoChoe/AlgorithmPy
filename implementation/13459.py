@@ -55,7 +55,7 @@ def move(x, y, dx, dy):
                 x -= 1
                 break
             x -= 1
-    print(f'move함수 return값들 출력: {x, y, wall_distance, is_hall}')
+
     return x, y, wall_distance, is_hall
 
 def bfs(start_red_x, start_red_y, start_blue_x, start_blue_y):
@@ -64,7 +64,6 @@ def bfs(start_red_x, start_red_y, start_blue_x, start_blue_y):
 
     while q:
         red_x, red_y, blue_x, blue_y, count = q.popleft()
-        print(f'pop된 요소들 출력: {red_x, red_y, blue_x, blue_y, count}')
         # 10번 이상되면 종료
         if count > 10:
             break
@@ -126,7 +125,6 @@ if __name__ == '__main__':
         graph_list = list(input())
         graph.append(graph_list)
 
-    # 방문 배열 (0번째는 red, 1번째는 blue)
     visited = [] 
 
     # 시작 red, blue 위치 찾기
@@ -139,6 +137,5 @@ if __name__ == '__main__':
                 start_red_x = i
                 start_red_y = j
 
-    print(f'시작 red 좌표, 시작 blue 좌표: {start_red_x, start_red_y}, {start_blue_x, start_blue_y}')
 
     bfs(start_red_x, start_red_y, start_blue_x, start_blue_y)
