@@ -5,7 +5,6 @@ from itertools import combinations
 dx = [0, 0, 1, -1]
 dy = [1, -1, 0, 0]
 
-# v = ([0,0], [1,1]]) 이런 형식
 def bfs(v):
     q = deque(v)
 
@@ -35,7 +34,7 @@ def bfs(v):
             if graph[i][j] != 1 and visited[i][j] == -1:
                 return -1 # 바로 종료
             # 최대 시간 찾기
-            cnt = max(cnt, graph[i][j])
+            cnt = max(cnt, visited[i][j])
     return cnt
             
 if __name__ == '__main__':    
@@ -66,18 +65,17 @@ if __name__ == '__main__':
             if graph[i][j] == 2:
                 virus_pos.append([i, j])
 
-    ans = 0 # TODO: 초기화
+    is_zero = True
+    ans = n * n # 
     for v in combinations(virus_pos, m):
-        print(v)
-        # ((0,0), (1, 1), (2,2))
-        # m = 2
-        # v = ([0,0], [1,1])
-        # v = ([0, 0], [2, 2])
-        # v = ([1,1], [2, 2])
+        return_value = bfs(v)
+        # 최솟값 갱신
+        if return_value != -1:
+            is_zero = False
+            ans = min(return_value, ans)
 
-        result = bfs(v)
-        if result != -1:
-            ans = min(ans, result)
-
-    print(ans) # TODO: 바이러스를 전부 퍼뜨리지 못하면 -1
-                        
+    # 모든 반환값이 -1이면 
+    if is_zero:
+        print(-1)
+    else:
+        print(ans)
