@@ -8,7 +8,6 @@ start = 1
 end = max(lans)
 
 # 랜선의 개수 구하기
-max_length = 0
 while start <= end:
     count = 0
     middle = (start + end) // 2
@@ -18,7 +17,7 @@ while start <= end:
     # 필요한 랜선의 개수보다 작게 잘랐으면
     if count >= n:
         # 최대 길이 갱신 (N개보다 많이 만드는 것도 N개를 만드는 것에 포함된다.)
-        max_length = max(max_length, middle) 
+        max_length = middle
         start = middle + 1 # 더 크게 자르기
     
     elif count < n:
