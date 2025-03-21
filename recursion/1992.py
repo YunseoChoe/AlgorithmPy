@@ -25,8 +25,9 @@ def func(x, y, n):
                 # 4구역
                 func(x + n // 2, y + n // 2, n // 2)
                 print(")", end = "")
-                return
+                return # return을 해야 중복 카운팅을 막을 수 있음.
     
+    # return되지 않은 경우 (즉 색깔이 모두 같을 때만 도달함.)
     print(color, end = "")
 
 func(0, 0, n)
