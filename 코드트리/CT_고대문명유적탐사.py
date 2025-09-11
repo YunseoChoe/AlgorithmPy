@@ -76,23 +76,29 @@ def calculated_gain(board_after_rotation):
     """회전 직 후, 점수를 계산 (보드 변경 x)"""
     tmp = copy.deepcopy(board_after_rotation)
     groups = find_groups(tmp)
-    return sum(len(g) for g in groups)
 
+    return sum(len(g) for g in groups)
 
 def choose_rotation(board):
     """모든 3x3 부분에 대해서 회전 후 가장 최적의 회전 결과를 반환"""
     best = None
+
+    # 모든 경우로 3x3 회전 시행
     for sr in range(0, 3):
         for sc in range(0, 3):
             for deg in (90, 180, 270):
                 new_board = rot3x3(board, sr, sc, deg)
+                # 유물 개수 구하기 (우선 순위 구하기용)
                 cnt = calculated_gain(new_board)
-                info = (-cnt, deg, sc, sr)  # 우선순위
+
+                # 우선 순위 계산
+                info = (-cnt, deg, sc, sr) 
+                # 우선 순위가 더 작으면 우선 순위 갱신 (최솟값처럼)
                 if best is None or info < best[0]:
                     best = (info, new_board)
 
-    info, new_board = best
-    return -info[0], new_board
+    info, new_board = best 
+    return -info[0], new_board # 유물 획득 개수와 최적의 회전 행렬 반환
 
 
 def erase(board, groups):
@@ -101,9 +107,9 @@ def erase(board, groups):
         for i, j in group:
             board[i][j] = 0
 
-
 def fill(board, wall_candidate):
     """열 오름차순, 행 내림차순"""
+    global wall_idx # 전역변수로 사용
     empty_cells = []
     for i in range(5):
         for j in range(5):
@@ -118,31 +124,43 @@ def fill(board, wall_candidate):
             if c1 > c2 or (c1 == c2 and r1 < r2):
                 empty_cells[i], empty_cells[j] = empty_cells[j], empty_cells[i]
 
-    idx = 0
     for r, c in empty_cells:
-        if idx < len(wall_candidate):
-            board[r][c] = wall_candidate[idx]
-            idx += 1
+        if wall_idx < len(wall_candidate):
+            # 우선순위대로 빈 곳 채우기
+            board[r][c] = wall_candidate[wall_idx]
+            wall_idx += 1
+
+        # 생겨날 조각의 개수가 부족하면
         else:
-            break
-
-    return board
-
+            break 
 
 def process_gain_chain(board, wall_candidate):
     """find_group -> 제거 -> 벽 채우기 (연쇄)"""
     total = 0
+
     while True:
+        # 유물 연쇄 획득
         groups = find_groups(board)
+        # print(f'groups: {groups}')
+
+        # 획득한 유물이 없다면 즉시 종료 
         if not groups:
+            # print("process_gain_chain에서 획득한 유물이 없음.")
             break
         else:
+            # 유물 지우기
             erase(board, groups)
+
+            # 지운 유물 개수 누적
             total += sum(len(g) for g in groups)
-            fill(board, wall_candidate)
+
+            # 유물 채우기
+            fill(board, wall_candidate) # 원본 board를 전달
+
+    # print(f'total: {total}')
     return total
 
-
+wall_idx = 0
 def main():
     k, m = map(int, input().split())
     board = []
@@ -151,16 +169,26 @@ def main():
         board.append(row)
 
     wall_candidate = list(map(int, input().split()))
+    global wall_idx # 벽 유물 인덱스 전역 변수로 선언
 
+    # k번 반복
     for _ in range(k):
+        # 최적의 회전 찾기
         cnt, rotated = choose_rotation(board)
+
+        # 획득한 유물이 없다면 즉시 종료
         if cnt == 0:
             break
+
+        # 획득한 유물이 있다면
         else:
             board = rotated
-            gain_cnt = process_gain_chain(board, wall_candidate)
-            print(gain_cnt)
 
+            # 연쇄 유물 획득
+            gain_cnt = process_gain_chain(board, wall_candidate)
+
+            # 획득한 유물 출력
+            print(gain_cnt, end = " ")
 
 if __name__ == "__main__":
     main()
