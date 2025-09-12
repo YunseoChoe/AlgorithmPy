@@ -8,6 +8,7 @@ if __name__ == '__main__':
     dx = [0, 1, 0, -1]
     dy = [1, 0, -1, 0] 
     
+
     q = deque()
     n = int(input()) # 보드의 크기
     k = int(input()) # 사과의 개수
@@ -41,15 +42,13 @@ if __name__ == '__main__':
         total_second += 1
 
         # 방향 전환
-        for s in snake_ways.keys(): 
-            # 만약 해당 초가 됐다면
-            if int(s) == total_second - 1:
-                # 방향이 L이라면 왼쪽으로 90도 회전
-                if snake_ways[s] == 'L':
-                    d = (d + 3) % 4
-                # 방향이 D라면 오른쪽으로 90도 회전
-                elif snake_ways[s] == 'D':
-                    d = (d + 1) % 4
+        if str(total_second - 1) in snake_ways:
+            way = snake_ways[str(total_second - 1)]
+            if way == 'L':
+                d = (d + 3) % 4
+            elif way == 'D':
+                d = (d + 1) % 4
+
 
         # 이동할 좌표 구하기 (d에 따라서)
         nx = nx + dx[d]

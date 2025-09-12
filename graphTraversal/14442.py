@@ -30,8 +30,8 @@ def bfs(start_x, start_y):
                     visited[nx][ny][breaks + 1] = visited[cur_x][cur_y][breaks] + 1
                     q.append((nx, ny, breaks + 1))
                         
-                # 벽이 아니면
-                elif graph[nx][ny] == "0" and visited[nx][ny][breaks] == 0:
+                # 방문하지 않았고 벽이 아니면
+                elif graph[nx][ny] == "0" and visited[nx][ny][breaks] == 0: 
                     visited[nx][ny][breaks] = visited[cur_x][cur_y][breaks] + 1
                     q.append((nx, ny, breaks)) 
 

@@ -37,3 +37,7 @@
 
 
 # bfs 방법
+n = int(input()) # 입력
+
+def bfs():
+    pass

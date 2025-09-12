@@ -44,7 +44,7 @@ chrs.sort() # 미리 정렬
 func(0)
 
 # 출력
-all_arr.sort() # 사전순 정렬
+# all_arr.sort() # 사전순 정렬
 for i in range(len(all_arr)):
     for j in range(len(all_arr[i])):
         print(all_arr[i][j], end = "")

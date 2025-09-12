@@ -30,6 +30,8 @@ def move(board, dir):
                     else:
                         edge -= 1
                         new_board[i][edge] = tmp
+                        new_board[i][j] = 0
+
     # 서
     elif dir == 1:
         for i in range(n):
@@ -47,41 +49,46 @@ def move(board, dir):
                     else:
                         edge += 1
                         new_board[i][edge] = tmp 
+                        new_board[i][j] = 0
 
     # 남
     elif dir == 2:
-        for i in range(n):
+        for i in range(n): # 열
             edge = n - 1
-            for j in range(n - 2, -1, -1):
-                if board[i][j] != 0:
-                    tmp = new_board[i][j]
-                    if new_board[i][edge] == 0:
-                        new_board[i][edge] = tmp
-                        new_board[i][j] = 0
-                    elif new_board[i][edge] == tmp:
-                        new_board[i][edge] += tmp
-                        new_board[i][j] = 0
+            for j in range(n - 2, -1, -1): # 행
+                if board[j][i] != 0:
+                    tmp = new_board[j][i]
+                    if new_board[edge][i] == 0:
+                        new_board[edge][i] = tmp
+                        new_board[j][i] = 0
+                    elif new_board[edge][i] == tmp:
+                        new_board[edge][i] += tmp
+                        new_board[j][i] = 0
                         edge  -= 1
                     else:
                         edge -= 1
-                        new_board[i][edge] = tmp  
+                        new_board[edge][i] = tmp  
+                        new_board[j][i] = 0
+
     # 북
     else:
-        for i in range(n):
+        for i in range(n): # 열
             edge = 0
-            for j in range(1, n):
-                if new_board[i][j] != 0:
-                    tmp = new_board[i][j]
-                    if new_board[i][edge] == 0:
-                        new_board[i][edge] = tmp
-                        new_board[i][j] = 0
-                    elif new_board[i][edge] == tmp:
-                        new_board[i][edge] += tmp
-                        new_board[i][j] = 0
+            for j in range(1, n): # 행
+                if new_board[j][i] != 0:
+                    tmp = new_board[j][i]
+                    if new_board[edge][i] == 0:
+                        new_board[edge][i] = tmp
+                        new_board[j][i] = 0
+                    elif new_board[edge][i] == tmp:
+                        new_board[edge][i] += tmp
+                        new_board[j][i] = 0
                         edge += 1
                     else:
                         edge += 1
-                        new_board[i][edge] = tmp
+                        new_board[edge][i] = tmp
+                        new_board[j][i] = 0
+
     return new_board
 
 def bfs(start_board, cnt):
@@ -94,17 +101,21 @@ def bfs(start_board, cnt):
         
         # 종료 조건
         if cnt == 5:
-            # 최댓값 갱신
+            # (cnt값이 5일 동안에만) 최댓값 갱신
             for i in range(n):
                 for j in range(n):
-                    max_value = max(max_value, board[i][j])
+                    if max_value < cur_board[i][j]:
+                        max_value = cur_board[i][j]
+            continue        
 
         # 동서남북 이동
         for i in range(4):
-            new_board = move(board, i)
-            # board의 변화가 있는 경우에만 q에 넣기..?
-            if cur_board != new_board:
-                q.append((new_board, cnt + 1))
+            new_board = move(cur_board, i)
+            # for x in range(n):
+            #     for y in range(n):
+            #         print(board[x][y], end=' ')
+            #     print()
+            q.append((new_board, cnt + 1))
 
     return max_value
 

@@ -46,7 +46,7 @@ def virus(board, safe_area_count):
     if max_area < safe_area_count:
         max_area = safe_area_count
 
-# (중복없이) 벽 세우는 함수
+# (중복없이) 벽 세우는 함수 -> 완전 탐색
 def createWall(count):
     # 벽이 이미 3개라면
     if count == 3:

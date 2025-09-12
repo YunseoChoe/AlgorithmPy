@@ -43,3 +43,4 @@ for num in range(n):
 # 생성자가 없을 때
 else:
     print(0)
+
