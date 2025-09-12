@@ -1,14 +1,29 @@
 # # 수 정렬하기 3
-# n = int(input())
+import sys
 
-# num = []
-# for i in range(n):
-#     num.append(int(input()))
+def quick_sort(arr):
+    if len(arr) < 2:
+        return arr
+    pivot = arr[-1]
+    less_arr = []
+    greater_arr = []
+    equal_arr = []
+    
+    for i in range(len(arr)):
+        if arr[i] < pivot:
+            less_arr.append(arr[i])
+        elif arr[i] > pivot:
+            greater_arr.append(arr[i])
+        else:
+            equal_arr.append(arr[i])
+    return quick_sort(less_arr) + equal_arr + quick_sort(greater_arr)
 
-# # Merge Sort -> O(n) = nlogn
+n = int(sys.stdin.readline())
+num = []
+for i in range(n):
+    a = int(sys.stdin.readline())
+    num.append(a)
 
-
-
-list = [[1,2], [1,2,3], [1, 2, 3, 4]]
-print(len(list))
-print(len(list[0]))
+num = quick_sort(num)
+for i in range(len(num)):
+    print(num[i])

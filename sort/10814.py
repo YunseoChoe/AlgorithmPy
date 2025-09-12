@@ -1,3 +1,4 @@
+# 나이순 정렬
 # import sys
 
 # n = int(sys.stdin.readline())
