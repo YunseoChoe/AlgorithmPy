@@ -10,7 +10,7 @@ def move_supplement(d, p, supplements, n):
     """
     dir: 이동 방향, cnt: 이동 횟수
     특수 영양제를 이동시킴
-    격자 바깥으로 나가면 반대편으로 돌아옴 (나머지 연산자 이용)
+    격자 바깥으로 나가면 반대편으로 돌아옴
     반환값: 이동된 supplements
     """
     new_supplements = []
@@ -31,13 +31,11 @@ def growup(moved_supplements, board, n):
     + 대각선으로 인접한 높이 1이상의 리브로수의 개수만큼 높이 증가
     반환값: grow_board
     """
-    # print(f'moved_supplements:; {moved_supplements}')
     grow_board = copy.deepcopy(board)
     diagonal_dirs = [DIRS[1], DIRS[3], DIRS[5], DIRS[7]] # 대각선 방향만 뽑음.
 
     # 높이 1 증가
     for i in range(len(moved_supplements)):
-        # print(f'moved_supplements[i][0]: {moved_supplements[i][0]}')
         grow_board[moved_supplements[i][0]][moved_supplements[i][1]] += 1
 
     # 대각선으로 인접한 높이 1이상의 리브로수의 개수만큼 증가
@@ -80,17 +78,17 @@ def put(moved_supplements, board, n):
     return cut_board, replaced_supplements
 
 def main():
-    n, m = map(int, input().split(' ')) # 격자 크기, 리브로수를 키우는 총 년 수
+    n, m = map(int, input().split()) # 격자 크기, 리브로수를 키우는 총 년 수
 
     board = []
     supplements = [(n - 2, 0), (n - 1, 0), (n - 2, 1), (n - 1, 1)] # 초기 특수 영양제 위치 (2x2)
     
     for _ in range(n):
-        board_list = list(map(int, input().split(" ")))
+        board_list = list(map(int, input().split()))
         board.append(board_list)
 
     for _ in range(m): # 총 m년마다 반복
-        d, p = map(int, input().split(' ')) # 이동 방향, 이동 칸 수
+        d, p = map(int, input().split()) # 이동 방향, 이동 칸 수
         
         # 특수 영양제 이동
         supplements = move_supplement(d - 1, p, supplements, n) # d가 아닌 d - 1로
@@ -108,7 +106,6 @@ def main():
             if board[i][j] > 0:
                 total_height += board[i][j]
 
-    # print(f'board 출력: {board}')
     print(total_height)
 
 if __name__ == "__main__":
