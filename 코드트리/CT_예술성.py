@@ -1,146 +1,169 @@
-# 예술성
-def get_contact_cnt(g1, g2, board, n):
-    """
-    g1(int), g2(int) 그룹끼리 맞닿아 있는 변의 수 구하기
-    """
-    contact_cnt = 0
+from collections import deque
 
-    dx = [0, 0, 1, -1]
-    dy = [1, -1, 0, 0]
-
-    for i in range(n):
-        for j in range(n):
-            # g1, g2에 속한 칸만 확인
-            if board[i][j] != g1 and board[i][j] != g2:
-                continue
-            # 동서남북
-            for k in range(4):
-                nr = i + dx[k]
-                nc = j + dy[k]
-
-                if not in_range(nr, nc, n):
-                    continue
-
-                if board[i][j] == g1:
-                    if board[nr][nc] == g2:
-                        contact_cnt += 1
-                
-                elif board[i][j] == g2:
-                    if board[nr][nc] == g1:
-                        contact_cnt += 1
-
-    return contact_cnt // 2  # 중복 제거
-
-def get_all_cnt_by_group(group, board, n):
-    """
-    해당 group(int)에 속한 칸의 수를 반환
-    """
-    cnt = 0
-    for i in range(n):
-        for j in range(n):
-            if board[i][j] == group:
-                cnt += 1
-    return cnt
-
-def in_range(r, c, n):
-    if 0 <= r < n and 0 <= c < n:
-        return True
-    return False
-
-def divide_group(nums, start, path, result):
-    if len(path) == 2:
-        result.append(tuple(path))
-        return
-    
-    for i in range(start, len(nums)):
-        divide_group(nums, i + 1, path + [nums[i]], result)
-
-def get_unique_numbers(board):
-    unique_nums = set()
-    for row in board:
-        unique_nums.update(row)  # 각 행의 숫자를 바로 set에 추가
-    return sorted(unique_nums)
-    
-def calculate_art_score(board, n):
-    """
-    예술 점수(조화로움의 합) 계산
-    (a 그룹에 속한 칸의 수 + b 그룹에 속한 칸의 수) x 그룹 a를 이루고 있는 숫자 값 x 그룹 b를 이루고 있는 숫자 값 x 그룹 a와 그룹 b가 서로 맞닿아 있는 변의 수 (항상 1임)
-    반환: 계산된 총 예술 점수
-
-    """
-    total_score = 0
-    # 그룹 나누기 (g1, g2) -> 조합 (백트래킹)
-
-    # 2차원 board에서 중복 제거된 숫자만 뽑기
-    unique_nums = get_unique_numbers(board)
-
-    # 그룹 나누기
-    indexs = []
-    divide_group(unique_nums, 0, [], indexs)
-
-    print(f'그룹핑된 그룹 출력: {indexs}') # indexs = [(1, 2), (1, 3), (2, 3)]
-
-    # 그룹 별로 total_score 구하기
-    for index in indexs:
-        group_a = index[0]
-        group_b = index[1]
-
-        # a그룹에 속한 칸의 수
-        group_a_score = get_all_cnt_by_group(group_a, board, n)
-        # b그룹에 속한 칸의 수
-        group_b_score = get_all_cnt_by_group(group_b, board, n)
-        # 맞닿아 있는 변의 수 구하기
-        contact_socre = get_contact_cnt(group_a, group_b, board, n)   
-        
-        total_score += (group_a_score + group_b_score) * group_a * group_b * contact_socre
-
-    return total_score
+def in_range(x, y, n):
+    return 0 <= x < n and 0 <= y < n
 
 def rotate(board, n):
     """
-    정중앙을 기준으로 두 선을 그어 만들어지는 십자 모양과 그 외 부분 회전
+    예술 점수 문제 회전 함수
+    중앙 십자가는 반시계 방향 90도 회전
+    나머지 4개 정사각형 구역은 시계 방향 90도 회전
     """
-    # 정중앙 위치 구하기
+    new_board = [[0] * n for _ in range(n)]
     center = n // 2
-    rotated_board = [[0] * n for _ in range(n)]
+
+    # 십자가 모양이면 반시계 방향 회전
+    # 열 -> 행
+    for i in range(n):
+        new_board[center][i] = board[i][center]
+    # 행 -> 열 (거꾸로)
+    for i in range(n):
+        new_board[i][center] = board[center][n - 1 - i]
+
+    # 4개의 정사각형 시계 방향 회전
+    def rotate_square(sx, sy, center):
+        for i in range(center):
+            for j in range(center):
+                new_board[sx + j][sy + center - 1 - i] = board[sx + i][sy + j]
+
+    # 좌상
+    rotate_square(0, 0, center)
+    # 우상
+    rotate_square(0, center + 1, center)
+    # 좌하
+    rotate_square(center + 1, 0, center)
+    # 우하
+    rotate_square(center + 1, center + 1, center)
+
+    return new_board
+
+def divide_group(board, n):
+    """
+    bfs를 통해서 그룹을 나눔
+    반환값: 그룹핑된 board(grouping_board), 해당 그룹의 원래 값(original_value: dict()), 해당 그룹의 크기(group_size: dict())
+    """
+    grouping_board = [[0] * n for _ in range(n)]
+    visited = [[False] * n for _ in range(n)]
+    original_value = dict()
+    group_size = dict()
+
+    gid = 0 # 그룹 아이디는 1번부터 이므로 0부터.
+    dirs = [(-1, 0), (1, 0), (0, -1), (0, 1)]
 
     for i in range(n):
         for j in range(n):
-            # 센터 영역이면
-            if i == center or j == center:
-                # 시계 방향 90도 회전
-                rotated_board[j][n - 1 - i] = board[i][j]
-            # 나머지 영역이면
-            else:
-                # 반시계 방향 90도 회전
-                rotated_board[n - 1 - j][i] = board[i][j]
-    
-    return rotated_board
+            # 방문하지 않았으면
+            if not visited[i][j]:
+                gid += 1 # 새로운 그룹을 발견하면 gid +1.
+                queue = deque()
+                queue.append((i, j))
+                visited[i][j] = True
+                grouping_board[i][j] = gid
+                
+                val = board[i][j]
+                size = 1
+
+                while queue:
+                    cx, cy = queue.popleft()
+                    # 동서남북
+                    for dx, dy in dirs:
+                        nx, ny = cx + dx, cy + dy
+                        # 범위, 방문하지 않았으면
+                        if in_range(nx, ny, n) and not visited[nx][ny]:
+                            # val과 같은 값이라면
+                            if board[nx][ny] == val:
+                                visited[nx][ny] = True
+                                grouping_board[nx][ny] = gid
+                                queue.append((nx, ny))
+                                size += 1
+                                
+
+                # 그룹 정보 기록
+                original_value[gid] = val
+                group_size[gid] = size
+
+    return grouping_board, original_value, group_size
+
+def backtrack(group_ids):
+    """"
+    백트래킹을 사용하여 2개씩 그룹 조합 생성하기
+    반환값: 2개의 그룹이 묶인 배열
+    """
+    result = []
+    n = len(group_ids)
+
+    def dfs(start, path):
+        if len(path) == 2:
+            result.append(tuple(path))
+            return
+        for i in range(start, n):
+            dfs(i + 1, path + [group_ids[i]])
+
+    dfs(0, [])
+
+    return result
+
+def get_contact_cnt(a, b, grouping_board, n):
+    """
+    두 그룹 a, b가 맞닿아 있는 변의 수 계산
+    """
+    dirs = [(-1, 0), (1, 0), (0, -1), (0, 1)]
+    cnt = 0
+
+    for i in range(n):
+        for j in range(n):
+            if grouping_board[i][j] == a: # 한 개의 그룹만 확인.
+                # 동서남북
+                for dx, dy in dirs:
+                    nx, ny = i + dx, j + dy
+                    # 범위 안에 있고 board[nx][ny] 값이 b그룹이라면
+                    if in_range(nx, ny, n) and grouping_board[nx][ny] == b:
+                        cnt += 1
+
+    return cnt
+
+def calculate_art_score(grouping_board, original_value, group_size, a, b, n):
+    """
+    예술 점수 계산
+    """
+    # 그룹 a에 속한 칸의 수
+    cnt_a = group_size[a]
+    # 그룹 b에 속한 칸의 수
+    cnt_b = group_size[b]
+    # 그룹 a를 이루고 있는 숫자 값
+    val_a = original_value[a]
+    # 그룹 b를 이루고 있는 숫자 값
+    val_b = original_value[b]
+    # 그룹 a와 그룹 b가 서로 맞닿아 있는 변의 수
+    border_cnt = get_contact_cnt(a, b, grouping_board, n)
+
+    return (cnt_a + cnt_b) * val_a * val_b * border_cnt
 
 def main():
+    total_score = 0
     board = []
     n = int(input())
     for _ in range(n):
-        # 색깔 정보 입력 (1 ~ 10)
-        input_list = list(map(int, input().split(" ")))
+        input_list = list(map(int, input().split()))
         board.append(input_list)
 
-    # 초기 예술 점수 구하기
-    early_score = calculate_art_score(board, n)
+    # 초기 상태 + 3번 회전
+    for _ in range(4):
+        # 그룹 나누기 (회전하면 새로운 그룹이 생기니 회전할 때마다 그룹을 나눠야 함.)
+        grouping_board, original_value, group_size = divide_group(board, n)
+        group_ids = list(group_size.keys())
 
-    # 1회전 예술 점수 구하기
-    board = rotate(board, n)
-    first_rotation_score = calculate_art_score(board, n)
+        # 조합 생성
+        combi = backtrack(group_ids)
 
-    # 2회전 예술 점수 구하기
-    board = rotate(board, n)
-    second_rotation_score = calculate_art_score(board, n)
+        # 점수 계산
+        for a, b in combi:
+            total_score += calculate_art_score(grouping_board, original_value, group_size, a, b, n)
 
-    # 3회전 예술 점수 구하기
-    board = rotate(board, n)
-    third_rotation_score = calculate_art_score(board, n)
-    
-    print(early_score + first_rotation_score + second_rotation_score + third_rotation_score)
+        # 회전
+        board = rotate(board, n)
+
+    print(total_score)
 
 if __name__ == "__main__":
     main()
